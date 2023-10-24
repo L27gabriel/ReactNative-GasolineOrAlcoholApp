@@ -7,10 +7,14 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import CustomModal from './components/CustomModal';
 
 export default function App() {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -25,9 +29,15 @@ export default function App() {
           <Text style={styles.inputLabel}>Gasolina (preço por litro):</Text>
           <TextInput placeholder="EX: 7.30" style={styles.input} />
 
-          <TouchableOpacity style={styles.areaBtn}>
+          <TouchableOpacity
+            style={styles.areaBtn}
+            onPress={() => setOpenModal(true)}>
             <Text style={styles.textBtn}>Calcular</Text>
           </TouchableOpacity>
+
+          <Modal visible={openModal}>
+            <CustomModal alcoholPrice={''} gasolinePrice={''} />
+          </Modal>
         </View>
       </ScrollView>
     </SafeAreaView>
