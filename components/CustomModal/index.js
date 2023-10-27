@@ -1,20 +1,25 @@
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 
-export default function CustomModal({alcoholPrice, gasolinePrice}) {
+export default function CustomModal({
+  alcoholPrice,
+  gasolinePrice,
+  closeModal,
+  functionTeste,
+}) {
   return (
     <View style={styles.container}>
       <Image source={require('../../assets/gas.png')} />
 
-      <Text style={styles.textResult}>Compensa usar Álcool</Text>
+      <Text style={styles.textResult}>{functionTeste()}</Text>
 
       <View style={{gap: 10}}>
         <Text style={styles.textOptions}>Com os preços:</Text>
-        <Text style={styles.textPrice}>Álcool: R$ 4.60</Text>
-        <Text style={styles.textPrice}>Gasolina: R$ 7.60</Text>
+        <Text style={styles.textPrice}>Álcool: R$ {alcoholPrice}</Text>
+        <Text style={styles.textPrice}>Gasolina: R$ {gasolinePrice}</Text>
       </View>
 
-      <TouchableOpacity style={styles.areaBtn}>
+      <TouchableOpacity style={styles.areaBtn} onPress={closeModal}>
         <Text style={styles.textBtn}>Calcular novamente</Text>
       </TouchableOpacity>
     </View>

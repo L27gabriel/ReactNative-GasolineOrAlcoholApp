@@ -9,34 +9,69 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import CustomModal from './components/CustomModal';
 
 export default function App() {
-  const [openModal, setOpenModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [alcoholPrice, setAlcoholPrice] = useState('');
+  const [gasolinePrice, setGasolinePrice] = useState('');
+  const inputAlcoholPriceRef = useRef();
+
+  function calculate() {
+    let result = alcoholPrice / gasolinePrice;
+    let phrase;
+
+    if (result < 0.7) {
+      phrase = 'Compensa usar Álcool';
+    } else {
+      phrase = 'Compensa usar Gasolina';
+    }
+    setModalVisible(true);
+    return phrase;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.logoArea}>
           <Image source={require('./assets/logo.png')} />
           <Text style={styles.textLogoArea}>Qual a melhor opção?</Text>
         </View>
         <View style={styles.inputArea}>
           <Text style={styles.inputLabel}>Álcool (preço por litro):</Text>
-          <TextInput placeholder="EX: 4.60" style={styles.input} />
+          <TextInput
+            placeholder="EX: 4.60"
+            style={styles.input}
+            value={alcoholPrice}
+            onChangeText={text => setAlcoholPrice(text)}
+            ref={inputAlcoholPriceRef}
+          />
 
           <Text style={styles.inputLabel}>Gasolina (preço por litro):</Text>
-          <TextInput placeholder="EX: 7.30" style={styles.input} />
+          <TextInput
+            placeholder="EX: 7.30"
+            style={styles.input}
+            value={gasolinePrice}
+            onChangeText={text => setGasolinePrice(text)}
+          />
 
-          <TouchableOpacity
-            style={styles.areaBtn}
-            onPress={() => setOpenModal(true)}>
+          <TouchableOpacity style={styles.areaBtn} onPress={calculate}>
             <Text style={styles.textBtn}>Calcular</Text>
           </TouchableOpacity>
 
-          <Modal visible={openModal}>
-            <CustomModal alcoholPrice={''} gasolinePrice={''} />
+          <Modal visible={modalVisible} animationType="slide">
+            <CustomModal
+              alcoholPrice={alcoholPrice}
+              gasolinePrice={gasolinePrice}
+              closeModal={() => {
+                setAlcoholPrice('');
+                setGasolinePrice('');
+                setModalVisible(false);
+                inputAlcoholPriceRef.current.focus();
+              }}
+              functionTeste={calculate}
+            />
           </Modal>
         </View>
       </ScrollView>
